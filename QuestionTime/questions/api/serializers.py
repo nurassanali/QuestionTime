@@ -1,25 +1,25 @@
 from rest_framework import serializers
-from questions.models import Ansnwer, Question
+from questions.models import Answer, Question
 
-class AnsnwerSerializer(serializers.ModelSerializer):
+class AnswerSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
     created_at = serializers.SerializerMethodField()
     likes_count = serializers.SerializerMethodField()
     user_has_voted = serializers.SerializerMethodField()
 
     class Meta:
-        model = Ansnwer
+        model = Answer
         exclude = ["question", "voters", "updated_at"]
 
     def get_created_at(self, instance):
-        return instance.created_at.strftime("%B %d  %Y")
+        return instance.created_at.strftime("%B %d,  %Y")
 
     def get_likes_count(self, instance):
         return instance.voters.count()
 
     def get_user_has_voted(self, instance):
         request = self.context.get("request")
-        return request.voters.filter(pk=request.user.pk).exists()
+        return instance.voters.filter(pk=request.user.pk).exists()
 
 class QuestionSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
@@ -40,4 +40,4 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     def get_user_has_answered(self, instance):
         request = self.context.get("request")
-        return request.answers.filter(author=request.user.pk).exists()
+        return instance.answers.filter(author=request.user.pk).exists()

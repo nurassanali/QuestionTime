@@ -13,7 +13,7 @@ class Question(models.Model):
     def __str__(self):
         return self.content
 
-class Ansnwer(models.Model):
+class Answer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     body = models.TextField()
