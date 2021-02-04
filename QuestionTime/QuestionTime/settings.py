@@ -139,7 +139,7 @@ LOGOUT_REDIRECT_URL = "/"
 STATIC_URL = '/static/'
 
 # Custom User Model
-AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = "users.CustomUser"
 
 # django-crispy forms
 CRISPY_TEMPLATE_PACK = "bootstrap4"
