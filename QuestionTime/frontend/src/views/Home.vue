@@ -4,9 +4,15 @@
         <div v-for="question in questions"
             :key="question.pk" >
             <p class="mb-0">Posted by:
-                <span class="author-name"> {{ question.author }} </span>
+                <span class="question-author"> {{ question.author }} </span>
             </p>
-            <h2> {{ question.content }} </h2>
+            <h2> 
+                <router-link 
+                    :to="{ name: 'question', params: { slug: question.slug } }"
+                    class="question-link"
+                >{{ question.content }}
+                </router-link> 
+            </h2>
             <p>Answers: {{ question.answers_count }} </p>
             <hr>
         </div>
@@ -15,7 +21,7 @@
 </template>
 
 <script>
-import { apiService } from "../common/api.service"
+import { apiService } from "../common/api.service.js"
 
 export default {
   name: "Home",
@@ -26,7 +32,7 @@ export default {
   },
   methods: {
       getQuestions() {
-          let endpoint = "api/questions/";
+          let endpoint = "/api/questions/";
           apiService(endpoint)
             .then(data => {
                 this.questions.push(...data.results);
@@ -35,14 +41,24 @@ export default {
   },
   created() {
       this.getQuestions()
-      console.log(this.questions)
+      document.title = "Question Time";
   }
 };
 </script>
 
 <style scoped>
-    .author-name {
+    .question-author {
         font-weight: bold;
         color: #DC3545;
+    }
+
+    .question-link {
+        font-weight: bold;
+        color: black;
+    }
+
+    .question-link:hover {
+        text-decoration: none;
+        color: #343A40;
     }
 </style>
