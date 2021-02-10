@@ -5,15 +5,19 @@
     </p>
     <p>{{ answer.body }}</p>
     <div v-if="isAnswerAuthor">
-        <button
+      <router-link
+        :to="{ name: 'answer-editor', params: { id: answer.id } }"
         class="btn btn-sm btn-outline-secondary mr-1"
-        >Edit</button>
-        <button
+        >Edit</router-link
+      >
+      <button
         class="btn btn-sm btn-outline-danger"
         @click="triggerDeleteAnswer"
-        >Delete</button>
+      >
+        Delete
+      </button>
     </div>
-    <hr>
+    <hr />
   </div>
 </template>
 
@@ -26,19 +30,19 @@ export default {
       required: true,
     },
     requestUser: {
-        type: String,
-        required: true
-    }
+      type: String,
+      required: true,
+    },
   },
   computed: {
-      isAnswerAuthor() {
-          return this.answer.author === this.requestUser;
-      }
+    isAnswerAuthor() {
+      return this.answer.author === this.requestUser;
+    },
   },
   methods: {
-      triggerDeleteAnswer() {
-          this.$emit("delete-answer", this.answer )
-      }
-  }
+    triggerDeleteAnswer() {
+      this.$emit("delete-answer", this.answer);
+    },
+  },
 };
 </script>
