@@ -26,11 +26,11 @@
           </div>
           <div class="card-footer px-3">
             <button type="submit" class="btn btn-sm btn-success">
-                Submit your answer
+              Submit your answer
             </button>
           </div>
         </form>
-        <p v-if="error" class="error mt-2"> {{ error }} </p>
+        <p v-if="error" class="error mt-2">{{ error }}</p>
       </div>
       <div v-else>
         <button class="btn btn-sm btn-success" @click="showForm = true">
@@ -46,6 +46,16 @@
         :key="index"
         :answer="answer"
       />
+      <div class="my-4">
+        <p v-show="loadingAnswers">...loading...</p>
+        <button
+          v-show="next"
+          @click="getQuestionAnswers"
+          class="btn btn-sm btn-outline-success"
+        >
+          Load more
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -73,6 +83,7 @@ export default {
       error: null,
       userHasAnswered: false,
       showForm: false,
+      loadingAnswers: false,
     };
   },
   methods: {
@@ -89,27 +100,37 @@ export default {
     },
     getQuestionAnswers() {
       let endpoint = `/api/questions/${this.slug}/answers/`;
+      if (this.next) {
+              endpoint = this.next;
+      }
       apiService(endpoint).then((data) => {
-        this.answers = data.results;
+        this.answers.push(...data.results);
+        this.loadingAnswers = false;
+        if (data.next) {
+          this.next = data.next;
+        } else {
+          this.next = null;
+        }
       });
     },
     onSubmit() {
-        if (this.newAnswerBody) {
-            let endpoint = `/api/questions/${this.slug}/answer/`
-            apiService(endpoint, "POST", {body: this.newAnswerBody})
-                .then(data => {
-                    this.answers.unshift(data)
-                })
-            this.newAnswerBody = null;
-            this.showForm = false;
-            this.userHasAnswered = true;
-            if (this.error) {
-                this.error = null;
-            }
-        } else {
-            this.error = "You can't send an empty answer"
+      if (this.newAnswerBody) {
+        let endpoint = `/api/questions/${this.slug}/answer/`;
+        apiService(endpoint, "POST", { body: this.newAnswerBody }).then(
+          (data) => {
+            this.answers.unshift(data);
+          }
+        );
+        this.newAnswerBody = null;
+        this.showForm = false;
+        this.userHasAnswered = true;
+        if (this.error) {
+          this.error = null;
         }
-    }
+      } else {
+        this.error = "You can't send an empty answer";
+      }
+    },
   },
   created() {
     this.getQuestionData();
@@ -130,7 +151,7 @@ export default {
 }
 
 .error {
-    font-weight: bold;
-    color: red;
+  font-weight: bold;
+  color: red;
 }
 </style>
