@@ -4,6 +4,7 @@
       <h1>
         {{ question.content }}
       </h1>
+      <QuestionActions v-if="isQuestionAuthor" :slug="question.slug"/>
       <p class="mb-0">
         Posted by:
         <span class="author-name"> {{ question.author }} </span>
@@ -65,6 +66,7 @@
 <script>
 import { apiService } from "@/common/api.service.js";
 import AnswerComponent from "@/components/Answer.vue";
+import QuestionActions from "@/components/QuestionActions.vue"
 
 export default {
   name: "Question",
@@ -76,6 +78,7 @@ export default {
   },
   components: {
     AnswerComponent,
+    QuestionActions
   },
   data() {
     return {
@@ -147,6 +150,11 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+  },
+  computed: {
+    isQuestionAuthor() {
+      return this.question.author === this.requestUser;
     },
   },
   created() {
