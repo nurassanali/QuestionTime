@@ -45,6 +45,8 @@
         v-for="(answer, index) in answers"
         :key="index"
         :answer="answer"
+        :requestUser="requestUser"
+        @delete-answer="deleteAnswer"
       />
       <div class="my-4">
         <p v-show="loadingAnswers">...loading...</p>
@@ -84,11 +86,16 @@ export default {
       userHasAnswered: false,
       showForm: false,
       loadingAnswers: false,
+      requestUser: null,
+      next: null,
     };
   },
   methods: {
     setPageTitle(title) {
       document.title = title;
+    },
+    setRequestUser() {
+      this.requestUser = window.localStorage.getItem("username");
     },
     getQuestionData() {
       let endpoint = `/api/questions/${this.slug}/`;
@@ -101,7 +108,7 @@ export default {
     getQuestionAnswers() {
       let endpoint = `/api/questions/${this.slug}/answers/`;
       if (this.next) {
-              endpoint = this.next;
+        endpoint = this.next;
       }
       apiService(endpoint).then((data) => {
         this.answers.push(...data.results);
@@ -131,10 +138,21 @@ export default {
         this.error = "You can't send an empty answer";
       }
     },
+    async deleteAnswer(answer) {
+      let endpoint = `/api/answers/${answer.id}/`;
+      try {
+        await apiService(endpoint, "DELETE");
+        this.$delete(this.answers, this.answers.indexOf(answer));
+        this.userHasAnswered = false;
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
   created() {
     this.getQuestionData();
     this.getQuestionAnswers();
+    this.setRequestUser();
   },
 };
 </script>
