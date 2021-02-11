@@ -111,7 +111,7 @@ export default {
           this.setPageTitle(data.content);
         } else {
           this.question = null;
-          this.setPageTitle("404-page not found")
+          this.setPageTitle("404-page not found");
         }
       });
     },

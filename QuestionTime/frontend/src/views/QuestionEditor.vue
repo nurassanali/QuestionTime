@@ -42,7 +42,7 @@ export default {
         let endpoint = "/api/questions/";
         let method = "POST";
         if (this.slug === undefined) {
-          endpoint += `${ this.slug }/`;
+          endpoint += `${this.slug}/`;
           method = "PUT";
         }
         apiService(endpoint, method, { content: this.question_body }).then(

@@ -9,39 +9,39 @@ import AnswerEditor from "../views/AnswerEditor.vue"
 Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: "/",
-    name: "home",
-    component: Home
-  },
-  {
-    path: "/question/:slug",
-    name: "question",
-    component: Question,
-    props: true
-  },
-  {
-      path: "/ask/:slug?",
-      name: "question-editor",
-      component: QuestionEditor,
-      props: true
-  },
-  {
-      path: "/answer/:id",
-      name: "answer-editor",
-      component: AnswerEditor,
-      props: true
-  },
-  {
-      path: "*",
-      name: "page-not-found",
-      component: NotFound
-  }
+    {
+        path: "/",
+        name: "home",
+        component: Home
+    },
+    {
+        path: "/question/:slug",
+        name: "question",
+        component: Question,
+        props: true
+    },
+    {
+        path: "/ask/:slug?",
+        name: "question-editor",
+        component: QuestionEditor,
+        props: true
+    },
+    {
+        path: "/answer/:id",
+        name: "answer-editor",
+        component: AnswerEditor,
+        props: true
+    },
+    {
+        path: "*",
+        name: "page-not-found",
+        component: NotFound
+    }
 ];
 
 const router = new VueRouter({
-  mode: "history",
-  routes
+    mode: "history",
+    routes
 });
 
 export default router;

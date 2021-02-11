@@ -49,10 +49,10 @@ export default {
     },
   },
   data() {
-      return {
-          userLikedAnswer: this.answer.user_has_voted,
-          likesCounter: this.answer.likes_count
-      }
+    return {
+      userLikedAnswer: this.answer.user_has_voted,
+      likesCounter: this.answer.likes_count,
+    };
   },
   computed: {
     isAnswerAuthor() {
@@ -64,8 +64,7 @@ export default {
       this.$emit("delete-answer", this.answer);
     },
     toggleLike() {
-      this.userLikedAnswer === false
-        ? this.likeAnswer() : this.unlikeAnswer()
+      this.userLikedAnswer === false ? this.likeAnswer() : this.unlikeAnswer();
     },
     likeAnswer() {
       this.userLikedAnswer = true;
@@ -78,7 +77,7 @@ export default {
       this.likesCounter -= 1;
       let endpoint = `/api/answers/${this.answer.id}/like/`;
       apiService(endpoint, "DELETE");
-    }
+    },
   },
 };
 </script>

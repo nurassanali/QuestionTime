@@ -33,26 +33,26 @@ export default {
     let data = await apiService(endpoint);
     // to.params.previousAnswer = data.body;
     // to.params.questionSlug = data.question_slug;
-    return next(vm => (
-      vm.answerBody = data.body,
-      vm.questionSlug = data.question_slug
-    ));
+    return next(
+      (vm) => (
+        (vm.answerBody = data.body), (vm.questionSlug = data.question_slug)
+      )
+    );
   },
   methods: {
     onSubmit() {
       if (this.answerBody) {
         let endpoint = `/api/answers/${this.id}/`;
-        apiService(endpoint, "PUT", {body: this.answerBody})
-          .then(() => {
-            this.$router.push({
-              name: "question",
-              params: {slug: this.questionSlug}
-            })
-          })
+        apiService(endpoint, "PUT", { body: this.answerBody }).then(() => {
+          this.$router.push({
+            name: "question",
+            params: { slug: this.questionSlug },
+          });
+        });
       } else {
-        this.error = "You can't submit an empty Answer!"
+        this.error = "You can't submit an empty Answer!";
       }
-    }
+    },
   },
 };
 </script>
