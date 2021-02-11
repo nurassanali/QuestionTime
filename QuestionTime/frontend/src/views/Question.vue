@@ -1,10 +1,10 @@
 <template>
   <div class="single-question mt-2">
-    <div class="container">
+    <div v-if="question" class="container">
       <h1>
         {{ question.content }}
       </h1>
-      <QuestionActions v-if="isQuestionAuthor" :slug="question.slug"/>
+      <QuestionActions v-if="isQuestionAuthor" :slug="question.slug" />
       <p class="mb-0">
         Posted by:
         <span class="author-name"> {{ question.author }} </span>
@@ -40,8 +40,10 @@
       </div>
       <hr />
     </div>
-
-    <div class="container">
+    <div v-else>
+      <h1 class="error text-center">404-Question not found</h1>
+    </div>
+    <div v-if="question" class="container">
       <AnswerComponent
         v-for="answer in answers"
         :key="answer.id"
@@ -66,7 +68,7 @@
 <script>
 import { apiService } from "@/common/api.service.js";
 import AnswerComponent from "@/components/Answer.vue";
-import QuestionActions from "@/components/QuestionActions.vue"
+import QuestionActions from "@/components/QuestionActions.vue";
 
 export default {
   name: "Question",
@@ -78,7 +80,7 @@ export default {
   },
   components: {
     AnswerComponent,
-    QuestionActions
+    QuestionActions,
   },
   data() {
     return {
@@ -103,9 +105,14 @@ export default {
     getQuestionData() {
       let endpoint = `/api/questions/${this.slug}/`;
       apiService(endpoint).then((data) => {
-        this.question = data;
-        this.userHasAnswered = data.user_has_answered;
-        this.setPageTitle(data.content);
+        if (data) {
+          this.question = data;
+          this.userHasAnswered = data.user_has_answered;
+          this.setPageTitle(data.content);
+        } else {
+          this.question = null;
+          this.setPageTitle("404-page not found")
+        }
       });
     },
     getQuestionAnswers() {
